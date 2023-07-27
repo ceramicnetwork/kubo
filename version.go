@@ -11,7 +11,7 @@ import (
 var CurrentCommit string
 
 // CurrentVersionNumber is the current application's version literal
-const CurrentVersionNumber = "0.21.0"
+const CurrentVersionNumber = "ceramic-0.21.0-validator"
 
 const ApiVersion = "/kubo/" + CurrentVersionNumber + "/" //nolint
 

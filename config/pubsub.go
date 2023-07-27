@@ -38,4 +38,8 @@ type PubsubConfig struct {
 	// SeenMessagesStrategy is a setting that determines how the time-to-live
 	// (TTL) countdown for deduplicating messages is calculated.
 	SeenMessagesStrategy *OptionalString `json:",omitempty"`
+
+	// EnableTracer enables JSON tracing to the standard output for debugging
+	// PubSub-related issues.
+	EnableTracer bool
 }

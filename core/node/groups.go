@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/dustin/go-humanize"
@@ -76,6 +77,15 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config, userResourceOverrides rcmgr.Part
 			return fx.Error(fmt.Errorf("unsupported Pubsub.SeenMessagesStrategy %q", configSeenMessagesStrategy))
 		}
 		pubsubOptions = append(pubsubOptions, pubsub.WithSeenMessagesStrategy(seenMessagesStrategy))
+
+		if cfg.Pubsub.EnableTracer {
+			// Direct the tracer output to stdout
+			tracer, err := pubsub.OpenJSONTracer("/dev/stdout", os.O_WRONLY|os.O_APPEND, 0644)
+			if err != nil {
+				logger.Fatal("Failed to create PubSub tracer.")
+			}
+			pubsubOptions = append(pubsubOptions, pubsub.WithEventTracer(tracer))
+		}
 
 		switch cfg.Pubsub.Router {
 		case "":
