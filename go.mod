@@ -1,5 +1,7 @@
 module github.com/ipfs/kubo
 
+replace github.com/libp2p/go-libp2p-pubsub => github.com/3box/go-libp2p-pubsub v0.0.0-20230803012038-b04afc6e0753
+
 require (
 	bazil.org/fuse v0.0.0-20200117225306-7b5117fecadc
 	contrib.go.opencensus.io/exporter/prometheus v0.4.0

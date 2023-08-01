@@ -77,6 +77,14 @@ func LibP2P(bcfg *BuildCfg, cfg *config.Config, userResourceOverrides rcmgr.Part
 		}
 		pubsubOptions = append(pubsubOptions, pubsub.WithSeenMessagesStrategy(seenMessagesStrategy))
 
+		if cfg.Pubsub.EnableTracer {
+			tracer, err := pubsub.NewLogTracer()
+			if err != nil {
+				logger.Fatal("Failed to create PubSub tracer.")
+			}
+			pubsubOptions = append(pubsubOptions, pubsub.WithEventTracer(tracer))
+		}
+
 		switch cfg.Pubsub.Router {
 		case "":
 			fallthrough
