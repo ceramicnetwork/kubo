@@ -33,7 +33,15 @@ import (
 
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"
+
+	// For profiling
+	//_ "github.com/ianlancetaylor/cgosymbolizer"
+	ipfs "github.com/ipfs/kubo"
+	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
+
+// CurrentCommit is the current git commit, this is set as a ldflag in the Makefile
+var CurrentCommit string
 
 // log is the command logger
 var log = logging.Logger("cmd/ipfs")
@@ -132,6 +140,27 @@ func mainRet() (exitCode int) {
 			} else {
 				os.Args[1] = "--help"
 			}
+		}
+
+		if os.Args[1] == "daemon" {
+			os.Setenv("DD_PROFILING_EXECUTION_TRACE_ENABLED", "true")
+			os.Setenv("DD_PROFILING_EXECUTION_TRACE_PERIOD", "15m")
+			version := ipfs.CurrentVersionNumber
+			if CurrentCommit != "" {
+				version += "/" + CurrentCommit
+			}
+			err := profiler.Start(
+				profiler.WithProfileTypes(
+					profiler.CPUProfile,
+					profiler.HeapProfile,
+					profiler.MutexProfile,
+					profiler.GoroutineProfile,
+				),
+			)
+			if err != nil {
+				return printErr(err)
+			}
+			defer profiler.Stop()
 		}
 	} else if insideGUI() { // if no args were passed, and we're in a GUI environment
 		// launch the daemon instead of launching a ghost window
