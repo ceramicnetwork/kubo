@@ -1,6 +1,6 @@
 module github.com/ipfs/kubo
 
-replace github.com/libp2p/go-libp2p-pubsub => github.com/3box/go-libp2p-pubsub v0.0.0-20230803012038-b04afc6e0753
+replace github.com/libp2p/go-libp2p-pubsub => github.com/3box/go-libp2p-pubsub v0.0.0-20230810163006-549b1ee7e5ca
 
 require (
 	bazil.org/fuse v0.0.0-20200117225306-7b5117fecadc
@@ -18,7 +18,6 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/ianlancetaylor/cgosymbolizer v0.0.0-20230801000641-8736a9d41aaa
 	github.com/ipfs/go-blockservice v0.5.1
 	github.com/ipfs/go-cid v0.3.2
 	github.com/ipfs/go-cidutil v0.1.0

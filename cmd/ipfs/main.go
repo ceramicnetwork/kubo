@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"runtime/pprof"
+	"strconv"
 	"time"
 
 	"github.com/ipfs/kubo/cmd/ipfs/util"
@@ -149,13 +150,24 @@ func mainRet() (exitCode int) {
 			if CurrentCommit != "" {
 				version += "/" + CurrentCommit
 			}
+			profileTypes := []profiler.ProfileType{
+				profiler.CPUProfile,
+				profiler.HeapProfile,
+				profiler.MutexProfile,
+				profiler.GoroutineProfile,
+			}
+			blockProfileEnabled := false
+			if configBlockProfileEnabled, found := os.LookupEnv("DD_BLOCK_PROFILE_ENABLED"); found {
+				if parseBlockProfileEnabled, err := strconv.ParseBool(configBlockProfileEnabled); err == nil {
+					blockProfileEnabled = parseBlockProfileEnabled
+				}
+			}
+			if blockProfileEnabled {
+				profileTypes = append(profileTypes, profiler.BlockProfile)
+			}
 			err := profiler.Start(
-				profiler.WithProfileTypes(
-					profiler.CPUProfile,
-					profiler.HeapProfile,
-					profiler.MutexProfile,
-					profiler.GoroutineProfile,
-				),
+				profiler.WithService("kubo"),
+				profiler.WithProfileTypes(profileTypes...),
 			)
 			if err != nil {
 				return printErr(err)
