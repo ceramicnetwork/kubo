@@ -30,8 +30,7 @@ func FloodSub(pubsubOptions ...pubsub.Option) interface{} {
 			helpers.LifecycleCtx(mctx, lc),
 			params.Host,
 			append(pubsubOptions,
-				pubsub.WithDiscovery(params.Discovery),
-				pubsub.WithDefaultValidator(pubsub.NewBasicSeqnoValidator(makePubSubMetadataStore(params.Repo.Datastore()))))...,
+				pubsub.WithDiscovery(params.Discovery))...,
 		)
 	}
 }
@@ -44,8 +43,7 @@ func GossipSub(pubsubOptions ...pubsub.Option) interface{} {
 			append(
 				pubsubOptions,
 				pubsub.WithDiscovery(params.Discovery),
-				pubsub.WithFloodPublish(true),
-				pubsub.WithDefaultValidator(pubsub.NewBasicSeqnoValidator(makePubSubMetadataStore(params.Repo.Datastore()))))...,
+				pubsub.WithFloodPublish(true))...,
 		)
 	}
 }
